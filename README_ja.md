@@ -91,7 +91,14 @@ push と pull request の際には CI（`.github/workflows/ci.yml`）が自動�
 - `main` から到達できるタグは **latest** リリースとして公開されます。
 - `develop` からのみ到達できるタグは **pre-release** として公開されます。
 
-各リリースには、すぐにインストールできる `MetadataFromASIN.zip` が添付されます。
+各リリースには2つのダウンロード用アーカイブが添付されます:
+
+- `MetadataFromASIN.zip` — Calibre プラグイン本体（*設定 → プラグイン →
+  ファイルからプラグインを読み込む* でインストール）。
+- `MetadataFromASIN-standalone.zip` — `run_asin.py`、`README.md`、`LICENSE`、
+  `MetadataFromASIN/` プラグインパッケージを同梱したスタンドアロン版。
+  展開して `python run_asin.py <ASIN> [domain]` を実行すれば、Calibre の
+  インストールなしでメタデータを取得できます。
 
 ## ライセンス
 

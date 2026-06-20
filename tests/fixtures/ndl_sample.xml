@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Synthetic NDL SRU (dcndl) response authored for tests. It is not copied from
+  any real NDL record; all values are placeholders using ASCII text.
+-->
+<srw:searchRetrieveResponse
+    xmlns:srw="http://www.loc.gov/zing/srw/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dcterms="http://purl.org/dc/terms/"
+    xmlns:dcndl="http://ndl.go.jp/dcndl/terms/"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/">
+  <srw:numberOfRecords>1</srw:numberOfRecords>
+  <srw:records>
+    <srw:record>
+      <srw:recordData>
+        <rdf:RDF>
+          <dcndl:BibResource>
+            <dc:title>
+              <rdf:Description>
+                <rdf:value>Test Title</rdf:value>
+                <dcndl:transcription>TEST TITLE READING</dcndl:transcription>
+              </rdf:Description>
+            </dc:title>
+            <dcndl:seriesTitle>
+              <rdf:Description>
+                <rdf:value>My Series</rdf:value>
+                <dcndl:transcription>MY SERIES READING</dcndl:transcription>
+              </rdf:Description>
+            </dcndl:seriesTitle>
+            <dcterms:creator>
+              <foaf:Agent>
+                <foaf:name>Yamada Taro</foaf:name>
+              </foaf:Agent>
+            </dcterms:creator>
+            <dcterms:creator>
+              <foaf:Agent>
+                <foaf:name>Yamada Taro 1950-</foaf:name>
+                <dcndl:transcription>YAMADA TARO</dcndl:transcription>
+              </foaf:Agent>
+            </dcterms:creator>
+            <dcterms:publisher>
+              <foaf:Agent>
+                <foaf:name>Test Publisher</foaf:name>
+              </foaf:Agent>
+            </dcterms:publisher>
+            <dcterms:language>jpn</dcterms:language>
+            <dcterms:date>2021</dcterms:date>
+          </dcndl:BibResource>
+        </rdf:RDF>
+      </srw:recordData>
+    </srw:record>
+  </srw:records>
+  <srw:extraResponseData>
+    <lst name="ISSUED_DATE">
+      <int name="2021">1</int>
+    </lst>
+  </srw:extraResponseData>
+</srw:searchRetrieveResponse>

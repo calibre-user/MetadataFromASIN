@@ -129,6 +129,41 @@ run_asin.py                 # スタンドアロン CLI ランナー (Calibre �
 - **作業開始時は必ず `git fetch` / `git pull` で最新化する**。
 - **コミットとプッシュも必ず行う**。ローカルに未 push の変更を残さない。
 
+### リリースタグの運用
+
+変更の種類に応じて、リリースタグを運用します。リリースは `vX.Y.Z` タグの push
+で自動作成されます（`.github/workflows/release.yml` 参照）。
+
+- **ドキュメントのみの変更**: タグは付けません。`develop` へのマージのみで完了
+  します。
+- **ロジック・コードの変更（通常）**: `develop` へのマージ後、pre-release タグ
+  （例: `v0.1.0`）を push します。タグは `develop` からのみ到達可能なため、
+  pre-release として公開されます。
+  ```sh
+  git checkout develop
+  git pull --ff-only
+  git tag v0.X.Y
+  git push origin v0.X.Y
+  ```
+- **重要な変更（stable リリース）**: `develop` → `main` の PR を作成してマージ
+  した後、`main` から到達可能なタグを push します。これにより **latest** リリース
+  として公開されます。
+  ```sh
+  git checkout main
+  git pull --ff-only
+  git tag v0.X.Y
+  git push origin v0.X.Y
+  ```
+- **stable リリースの判定は手動**: どのタイミングで `main` にマージして latest
+  を出すかは人間が判断します。自動化しません。
+
+要点:
+
+- **コード変更 → `develop` マージ後に pre-release タグを push**。
+- **重要な変更 → `develop` → `main` の PR を作成・マージ後、latest タグを push**。
+- **stable は手動判定**。自動で `main` にマージしたり latest タグを付けたり
+  しない。
+
 ---
 
 ## English
@@ -253,3 +288,39 @@ Key points:
   through a PR.
 - **Always start work with `git fetch` / `git pull`** to stay up to date.
 - **Always commit and push**. Do not leave unpushed changes locally.
+
+### Release tagging
+
+Release tags are applied according to the type of change. Releases are created
+automatically when a `vX.Y.Z` tag is pushed
+(see `.github/workflows/release.yml`).
+
+- **Documentation-only changes**: do not tag. Merging to `develop` is enough.
+- **Logic / code changes (normal)**: after merging to `develop`, push a
+  pre-release tag (e.g. `v0.1.0`). Because the tag is reachable only from
+  `develop`, it is published as a pre-release.
+  ```sh
+  git checkout develop
+  git pull --ff-only
+  git tag v0.X.Y
+  git push origin v0.X.Y
+  ```
+- **Important changes (stable release)**: open a PR from `develop` to `main`,
+  merge it, then push a tag reachable from `main`. This publishes a **latest**
+  release.
+  ```sh
+  git checkout main
+  git pull --ff-only
+  git tag v0.X.Y
+  git push origin v0.X.Y
+  ```
+- **Stable release timing is manual**: a human decides when to merge to `main`
+  and publish a latest release. This is never automated.
+
+Key points:
+
+- **Code change → after merging to `develop`, push a pre-release tag**.
+- **Important change → open and merge a `develop` → `main` PR, then push a
+  latest tag**.
+- **Stable is decided manually**. Never automatically merge to `main` or push a
+  latest tag.

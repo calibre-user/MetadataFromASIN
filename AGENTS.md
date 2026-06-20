@@ -16,8 +16,8 @@ this repository.
 
 - **コード**（ソースコード、コメント、docstring、識別子、ログメッセージ）は、
   **英語かつ ASCII 文字のみ** で記述してください。
-- **ドキュメント**（`README.md` や `AGENTS.md` などの Markdown ファイル）は
-  日本語で記述してよく、**日英併記が理想** です。本プロジェクトは主に日本語の
+- **ドキュメント**（`README.md`、`README_ja.md`、`AGENTS.md` などの Markdown
+  ファイル）は日本語で記述してよく、**日英併記が理想** です。本プロジェクトは主に日本語の
   書籍メタデータを扱うため、日本語話者向けの説明があると役立ちます。
 - 本プロジェクトは日本語の書籍メタデータを解析するので、一部の正規表現は日本語
   テキストにマッチする必要があります。そうした非 ASCII 文字は Python の Unicode
@@ -91,6 +91,79 @@ run_asin.py                 # スタンドアロン CLI ランナー (Calibre �
 - リリースは `vX.Y.Z` タグがプッシュされたときに自動的に公開されます
   （`.github/workflows/release.yml` を参照）。バージョンは `v0.0.1` から始まります。
 
+### ワークフロー
+
+`develop` は保護されており直接 push できないため、すべての変更は以下の手順で
+適用してください。人間・自動化エージェントを問わず、この手順を必ず守ります。
+
+1. **最新状態の確認から始める**: 作業を始める前に必ず `git fetch` と `git pull`
+   を実行し、リモートの最新変更を取り込んでください。
+   ```sh
+   git fetch --all --prune
+   git checkout develop
+   git pull --ff-only
+   ```
+2. **作業ブランチを作成する**: `develop` から新しいブランチを切ります。
+   ```sh
+   git checkout -b <type>/<short-description>
+   ```
+   例: `feature/sru-pagination`, `fix/isbn-normalization`, `docs/readme-split`
+3. **変更を加える**: コード・ドキュメントを編集し、テストと
+   `python -m py_compile MetadataFromASIN/*.py run_asin.py` で確認します。
+4. **コミットする**: 意味のある単位でコミットします。
+   ```sh
+   git add <files>
+   git commit -m "<short English message>"
+   ```
+5. **プッシュする**: 作業ブランチをリモートに push します。
+   ```sh
+   git push -u origin <branch>
+   ```
+6. **プルリクエストを作成する**: `<branch>` → `develop` の PR を作成し、CI と
+   レビューを経てからマージします。`develop` への直接 push は禁止です。
+
+要点:
+
+- **`develop` への直接 push は不可**。常にブランチを作成し、PR 経由で変更を適用
+  する。
+- **作業開始時は必ず `git fetch` / `git pull` で最新化する**。
+- **コミットとプッシュも必ず行う**。ローカルに未 push の変更を残さない。
+
+### リリースタグの運用
+
+変更の種類に応じて、リリースタグを運用します。リリースは `vX.Y.Z` タグの push
+で自動作成されます（`.github/workflows/release.yml` 参照）。
+
+- **ドキュメントのみの変更**: タグは付けません。`develop` へのマージのみで完了
+  します。
+- **ロジック・コードの変更（通常）**: `develop` へのマージ後、pre-release タグ
+  （例: `v0.1.0`）を push します。タグは `develop` からのみ到達可能なため、
+  pre-release として公開されます。
+  ```sh
+  git checkout develop
+  git pull --ff-only
+  git tag v0.X.Y
+  git push origin v0.X.Y
+  ```
+- **重要な変更（stable リリース）**: `develop` → `main` の PR を作成してマージ
+  した後、`main` から到達可能なタグを push します。これにより **latest** リリース
+  として公開されます。
+  ```sh
+  git checkout main
+  git pull --ff-only
+  git tag v0.X.Y
+  git push origin v0.X.Y
+  ```
+- **stable リリースの判定は手動**: どのタイミングで `main` にマージして latest
+  を出すかは人間が判断します。自動化しません。
+
+要点:
+
+- **コード変更 → `develop` マージ後に pre-release タグを push**。
+- **重要な変更 → `develop` → `main` の PR を作成・マージ後、latest タグを push**。
+- **stable は手動判定**。自動で `main` にマージしたり latest タグを付けたり
+  しない。
+
 ---
 
 ## English
@@ -99,8 +172,9 @@ run_asin.py                 # スタンドアロン CLI ランナー (Calibre �
 
 - **Code** (source code, comments, docstrings, identifiers, log messages) must
   be written in **English using ASCII-only characters**. 
-- **Documentation** (Markdown files such as `README.md` and `AGENTS.md`) may be
-  written in Japanese and is **ideally bilingual (Japanese + English)**. The
+- **Documentation** (Markdown files such as `README.md`, `README_ja.md`, and
+  `AGENTS.md`) may be written in Japanese and is **ideally bilingual (Japanese +
+  English)**. The
   project mainly deals with Japanese book metadata, so explanations aimed at
   Japanese speakers are helpful.
 - The project parses Japanese book metadata, so some regular expressions must
@@ -174,3 +248,79 @@ single place and is reused by both the plugin and the standalone runner.
 - `main` produces the `latest` release; `develop` produces pre-releases.
 - Releases are published automatically when a `vX.Y.Z` tag is pushed
   (see `.github/workflows/release.yml`). Versioning starts at `v0.0.1`.
+
+### Workflow
+
+`develop` is protected and cannot be pushed to directly, so every change must
+be applied through the following steps. Both human and automated contributors
+must follow this procedure.
+
+1. **Start by syncing the latest state**: before any work, always run
+   `git fetch` and `git pull` to incorporate the latest remote changes.
+   ```sh
+   git fetch --all --prune
+   git checkout develop
+   git pull --ff-only
+   ```
+2. **Create a working branch**: branch off from `develop`.
+   ```sh
+   git checkout -b <type>/<short-description>
+   ```
+   Examples: `feature/sru-pagination`, `fix/isbn-normalization`,
+   `docs/readme-split`
+3. **Make changes**: edit code or documentation, then verify with tests and
+   `python -m py_compile MetadataFromASIN/*.py run_asin.py`.
+4. **Commit**: commit in meaningful units.
+   ```sh
+   git add <files>
+   git commit -m "<short English message>"
+   ```
+5. **Push**: push the working branch to the remote.
+   ```sh
+   git push -u origin <branch>
+   ```
+6. **Open a pull request**: open a PR from `<branch>` to `develop`. It must pass
+   CI and review before merging. Direct pushes to `develop` are forbidden.
+
+Key points:
+
+- **Never push directly to `develop`**. Always create a branch and apply changes
+  through a PR.
+- **Always start work with `git fetch` / `git pull`** to stay up to date.
+- **Always commit and push**. Do not leave unpushed changes locally.
+
+### Release tagging
+
+Release tags are applied according to the type of change. Releases are created
+automatically when a `vX.Y.Z` tag is pushed
+(see `.github/workflows/release.yml`).
+
+- **Documentation-only changes**: do not tag. Merging to `develop` is enough.
+- **Logic / code changes (normal)**: after merging to `develop`, push a
+  pre-release tag (e.g. `v0.1.0`). Because the tag is reachable only from
+  `develop`, it is published as a pre-release.
+  ```sh
+  git checkout develop
+  git pull --ff-only
+  git tag v0.X.Y
+  git push origin v0.X.Y
+  ```
+- **Important changes (stable release)**: open a PR from `develop` to `main`,
+  merge it, then push a tag reachable from `main`. This publishes a **latest**
+  release.
+  ```sh
+  git checkout main
+  git pull --ff-only
+  git tag v0.X.Y
+  git push origin v0.X.Y
+  ```
+- **Stable release timing is manual**: a human decides when to merge to `main`
+  and publish a latest release. This is never automated.
+
+Key points:
+
+- **Code change → after merging to `develop`, push a pre-release tag**.
+- **Important change → open and merge a `develop` → `main` PR, then push a
+  latest tag**.
+- **Stable is decided manually**. Never automatically merge to `main` or push a
+  latest tag.

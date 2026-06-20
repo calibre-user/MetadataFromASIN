@@ -92,7 +92,14 @@ pushed (see `.github/workflows/release.yml`):
 - tags reachable from `main` are published as the **latest** release,
 - tags reachable only from `develop` are published as **pre-releases**.
 
-Each release attaches a ready-to-install `MetadataFromASIN.zip`.
+Each release attaches two downloadable archives:
+
+- `MetadataFromASIN.zip` — the Calibre plugin (install via
+  *Preferences → Plugins → Load plugin from file*).
+- `MetadataFromASIN-standalone.zip` — a standalone package containing
+  `run_asin.py`, `README.md`, `LICENSE`, and the `MetadataFromASIN/` plugin
+  package. Unzip it and run `python run_asin.py <ASIN> [domain]` without
+  installing Calibre.
 
 ## License
 

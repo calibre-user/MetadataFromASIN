@@ -27,6 +27,14 @@ jobs:
           cd MetadataFromASIN
           zip -r ../MetadataFromASIN.zip . -x '*__pycache__*' '*.pyc'
 
+      - name: Build standalone ZIP
+        run: |
+          mkdir -p stage/MetadataFromASIN
+          cp -r MetadataFromASIN/*.py stage/MetadataFromASIN/
+          cp run_asin.py README.md LICENSE stage/
+          cd stage
+          zip -r ../MetadataFromASIN-standalone.zip . -x '*__pycache__*' '*.pyc'
+
       - name: Determine release channel
         id: channel
         run: |
@@ -48,4 +56,4 @@ jobs:
           else
             args+=(--latest)
           fi
-          gh release create "$GITHUB_REF_NAME" MetadataFromASIN.zip "${args[@]}"
+          gh release create "$GITHUB_REF_NAME" MetadataFromASIN.zip MetadataFromASIN-standalone.zip "${args[@]}"

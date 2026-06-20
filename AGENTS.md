@@ -164,6 +164,18 @@ run_asin.py                 # スタンドアロン CLI ランナー (Calibre �
 - **stable は手動判定**。自動で `main` にマージしたり latest タグを付けたり
   しない。
 
+### リリースアーティファクト
+
+各リリースには2つの ZIP が添付されます
+（`.github/workflows/release.yml` 参照）。
+
+- `MetadataFromASIN.zip` — Calibre プラグイン本体。`MetadataFromASIN/` 配下の
+  ファイルのみを格納します。
+- `MetadataFromASIN-standalone.zip` — スタンドアロン実行用パッケージ。
+  `run_asin.py`、`README.md`、`LICENSE`、`MetadataFromASIN/` プラグインパッケージ
+  の4つを格納します。Calibre 不要で `python run_asin.py <ASIN> [domain]` を
+  実行できます。
+
 ---
 
 ## English
@@ -324,3 +336,14 @@ Key points:
   latest tag**.
 - **Stable is decided manually**. Never automatically merge to `main` or push a
   latest tag.
+
+### Release artifacts
+
+Each release attaches two ZIP archives
+(see `.github/workflows/release.yml`).
+
+- `MetadataFromASIN.zip` — the Calibre plugin. Contains only the files under
+  `MetadataFromASIN/`.
+- `MetadataFromASIN-standalone.zip` — a standalone package containing
+  `run_asin.py`, `README.md`, `LICENSE`, and the `MetadataFromASIN/` plugin
+  package. Run `python run_asin.py <ASIN> [domain]` without Calibre.
